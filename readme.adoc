@@ -6,7 +6,7 @@
 Utility library providing more Kotlin-friendly extensions of the JDBC API.
 
 image:https://img.shields.io/github/license/foxcapades/kdbc[GitHub License]
-image:https://img.shields.io/badge/docs-dokka-%230e86d4[API Documentation, link="https://foxcapades.github.io/kdbc/{version-feature}"]
+image:https://img.shields.io/badge/docs-dokka-%230e86d4[API Documentation, link="https://foxcapades.github.io/kdbc/"]
 image:https://img.shields.io/badge/kotlin-2.1.20-%237F52FF[Kotlin Version]
 image:https://img.shields.io/badge/jvm-11-%23f90[Target JVM Version]
 image:https://img.shields.io/maven-central/v/io.foxcapades.kt/kdbc[Version, link="https://central.sonatype.com/artifact/io.foxcapades.kt/kdbc/{actual-version}"]
