@@ -92,16 +92,16 @@ tasks.dokkaHtml {
   }
 }
 
-nexusPublishing {
-  repositories {
-    sonatype {
-      nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
-      snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-      username = project.findProperty("nexus.user") as String? ?: System.getenv("NEXUS_USER")
-      password = project.findProperty("nexus.pass") as String? ?: System.getenv("NEXUS_PASS")
-    }
-  }
-}
+//nexusPublishing {
+//  repositories {
+//    sonatype {
+//      nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
+//      snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+//      username = project.findProperty("nexus.user") as String? ?: System.getenv("NEXUS_USER")
+//      password = project.findProperty("nexus.pass") as String? ?: System.getenv("NEXUS_PASS")
+//    }
+//  }
+//}
 
 publishing {
   publications {
