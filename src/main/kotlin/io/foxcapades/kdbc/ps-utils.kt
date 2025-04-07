@@ -35,10 +35,6 @@ fun PreparedStatement.setUByte(index: Int, value: UByte) =
 fun PreparedStatement.setUShort(index: Int, value: UShort) =
   setInt(index, value.toInt())
 
-fun PreparedStatement.foo() {
-  this[1, Types.BIGINT] = "hello"
-}
-
 /**
  * Sets the given [value] on the receiver [PreparedStatement] at the given
  * [index] as a [Long] value (SQL type [`BIGINT`][Types.BIGINT]) using

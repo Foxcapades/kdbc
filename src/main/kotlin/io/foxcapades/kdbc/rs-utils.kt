@@ -267,7 +267,10 @@ inline fun <K, V> ResultSet.toMap(
  * cursor indexing, it may result in a number of yielded rows that differs from
  * the actual result row count.
  *
- * The returned `Sequence` _DOES NOT_ close the receiver `ResultSet`.
+ * The returned `Sequence` _DOES NOT_ close the receiver `ResultSet`.  The
+ * `ResultSet` should be closed only _after_ the sequence has been consumed,
+ * returning the `Sequence` from a closing block will result in undefined
+ * behavior, likely an exception.
  *
  * Example:
  * ```kotlin
