@@ -1,0 +1,101 @@
+= JDBC Kotlin Extensions
+:source-highlighter: highlightjs
+
+Utility library providing more Kotlin-friendly extensions of the JDBC API.
+
+== Examples
+
+=== PreparedStatement
+
+==== Autoclosing Expression Blocks
+
+``PreparedStatement``s may be created, executed, and closed with a
+builder/expression block for more ergonomic setup and usage.
+
+[source, kotlin]
+----
+conn.withPreparedStatement(sql) {
+  // this == PreparedStatement
+}
+
+conn.usingPreparedStatement(sql) { ps ->
+  // ps == PreparedStatement
+}
+----
+
+==== Execution into ResultSet Expression Blocks
+
+[source, kotlin]
+----
+val name = ps.withResults {
+  if (next())
+    getString("name")
+  else
+    null
+}
+
+val name = ps.usingResults {
+  if (it.next())
+    it.getString("name")
+  else
+    null
+}
+----
+
+==== Unsigned Types
+
+[source, kotlin]
+----
+ps.setUByte(1, myValue)
+ps.setUShort(1, myValue)
+ps.setUInt(1, myValue)
+ps.setULong(1, myValue)
+----
+
+==== Indexed Setter Overloads
+
+[source, kotlin]
+----
+ps[1] = "hello"
+ps[2, Types.INTEGER] = 245
+----
+
+=== ResultSet
+
+==== Results to List
+
+[source, kotlin]
+----
+val features = rs.map { it.getString("feature") }
+----
+
+==== Results to Map
+
+[source, kotlin]
+----
+val settings = rs.toMap {
+  it.getString("setting") to it.getBoolean("flag")
+}
+----
+
+==== Result to Sequence
+
+[source, kotlin]
+----
+// Map<String, MyObj>
+val acceptableResults = connection.usingStatementResults(sql) { rs ->
+  rs.toSequence()
+    .filter { isAcceptable(it.getString("rule"), it.getBigDecimal("value")) }
+    .map { it.getString("record_ref") to MyObj(it.getInt("count"), it.getBigDecimal("value")) }
+    .toMap()
+}
+----
+
+==== Indexed Getter Overloads
+
+[source,kotlin]
+----
+data class MyObj(val name: String, val created: OffsetDateTime)
+...
+return MyObj(resultSet[1], resultSet["created_on"])
+----
