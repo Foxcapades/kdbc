@@ -15,6 +15,7 @@ out/
 
 ### Kotlin ###
 .kotlin
+docs/dokka/
 
 ### Eclipse ###
 .apt_generated
