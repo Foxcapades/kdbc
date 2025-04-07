@@ -5,16 +5,18 @@ import java.sql.ResultSet
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.reflect.KClass
 
 /**
- * Inline wrapper function around [ResultSet.getObject] that uses the generic
- * type [T] to populate the class value for the second argument.
+ * Inline wrapper function around [ResultSet.getObject] allowing indexed access,
+ * that uses the generic type [T] to populate the class value for the second
+ * argument.
  *
  * Example 1 - Type is already known:
  * ```kotlin
  * data class Foo(val something: String)
  *
- * Foo(something = rs.get(1))
+ * Foo(something = rs[1])
  * ```
  *
  * Example 2 - Type is provided to call:
@@ -32,14 +34,34 @@ inline operator fun <reified T> ResultSet.get(columnIndex: Int): T =
   getObject(columnIndex, T::class.java)
 
 /**
- * Inline wrapper function around [ResultSet.getObject] that uses the generic
- * type [T] to populate the class value for the second argument.
+ * Wrapper function around [ResultSet.getObject] allowing indexed access.
+ *
+ * Example:
+ * ```kotlin
+ * val foo = rs[1, String::class]
+ * ```
+ *
+ * @param columnIndex Index of the column in the current result row from which
+ * the value should be retrieved.
+ *
+ * @param type KClass type for the value to be returned.
+ *
+ * @return The value from the result row at the given column index, retrieved
+ * as type [T].
+ */
+operator fun <T: Any> ResultSet.get(columnIndex: Int, type: KClass<T>): T =
+  getObject(columnIndex, type.java)
+
+/**
+ * Inline wrapper function around [ResultSet.getObject] allowing indexed access,
+ * that uses the generic type [T] to populate the class value for the second
+ * argument.
  *
  * Example 1 - Type is already known:
  * ```kotlin
  * data class Foo(val something: String)
  *
- * Foo(something = rs.get("something"))
+ * Foo(something = rs["something"])
  * ```
  *
  * Example 2 - Type is provided to call:
@@ -55,6 +77,25 @@ inline operator fun <reified T> ResultSet.get(columnIndex: Int): T =
  */
 inline operator fun <reified T> ResultSet.get(columnLabel: String): T =
   getObject(columnLabel, T::class.java)
+
+/**
+ * Wrapper function around [ResultSet.getObject] allowing indexed access.
+ *
+ * Example:
+ * ```kotlin
+ * val foo = rs["something", String::class]
+ * ```
+ *
+ * @param columnLabel Label for the column in the current result row from which
+ * the value should be retrieved.
+ *
+ * @param type KClass type for the value to be returned.
+ *
+ * @return The value from the result row at the given column index, retrieved
+ * as type [T].
+ */
+fun <T: Any> ResultSet.get(columnLabel: String, type: KClass<T>): T =
+  getObject(columnLabel, type.java)
 
 /**
  * Iterates through the rows in the receiver [ResultSet] instance, and builds a
