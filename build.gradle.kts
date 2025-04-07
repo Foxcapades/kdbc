@@ -1,3 +1,5 @@
+import java.net.URL
+
 plugins {
   alias(libs.plugins.kotlin)
   alias(libs.plugins.dokka)
@@ -79,12 +81,14 @@ tasks.test {
 }
 
 tasks.dokkaHtml {
-  val targetDir = file("docs/dokka/${projectVersion.featureVersion}")
-
-  outputDirectory = targetDir
-
-  doFirst {
-    targetDir.deleteRecursively()
+  outputDirectory = file("docs/dokka")
+  suppressObviousFunctions.set(true)
+  dokkaSourceSets.configureEach {
+    sourceLink {
+      localDirectory.set(projectDir.resolve("src"))
+      remoteUrl.set(URL("https://github.com/Foxcapades/kdbc/tree/main/src"))
+      remoteLineSuffix.set("#L")
+    }
   }
 }
 
