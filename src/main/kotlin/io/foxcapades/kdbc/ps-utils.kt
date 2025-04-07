@@ -13,6 +13,9 @@ private val UnsignedLongMask = BigInteger.ONE.shiftLeft(Long.SIZE_BITS) - BigInt
  * [index] as a [Short] (SQL type [`SMALLINT`][Types.SMALLINT]) value using
  * [PreparedStatement.setShort].
  *
+ * Value is set as the `SMALLINT` type so as not to cause unexpected behavior
+ * for values exceeding the max signed `int8` value.
+ *
  * @receiver PreparedStatement instance to mutate.
  *
  * @param index Index to set the given [UByte] value at.
@@ -24,7 +27,11 @@ fun PreparedStatement.setUByte(index: Int, value: UByte) =
 
 /**
  * Sets the given [value] on the receiver [PreparedStatement] at the given
- * [index] as an [Int] (SQL type [`INTEGER`][Types.INTEGER]) value using [PreparedStatement.setInt].
+ * [index] as an [Int] (SQL type [`INTEGER`][Types.INTEGER]) value using
+ * [PreparedStatement.setInt].
+ *
+ * Value is set as the `INTEGER` type so as not to cause unexpected behavior for
+ * values exceeding the max signed `int16` value.
  *
  * @receiver PreparedStatement instance to mutate.
  *
@@ -40,6 +47,9 @@ fun PreparedStatement.setUShort(index: Int, value: UShort) =
  * [index] as a [Long] value (SQL type [`BIGINT`][Types.BIGINT]) using
  * [PreparedStatement.setLong].
  *
+ * Value is set as the `BIGINT` type so as not to cause unexpected behavior for
+ * values exceeding the max signed `int32` value.
+ *
  * @receiver PreparedStatement instance to mutate.
  *
  * @param index Index to set the given [UInt] value at.
@@ -54,6 +64,9 @@ fun PreparedStatement.setUInt(index: Int, value: UInt) =
  * [index] as a [BigDecimal] (SQL type [`NUMERIC`][Types.NUMERIC]) value using
  * [PreparedStatement.setBigDecimal].
  *
+ * Value is set as the `NUMERIC` type so as not to cause unexpected behavior for
+ * values exceeding the max signed `int64` value.
+ *
  * @receiver PreparedStatement instance to mutate.
  *
  * @param index Index to set the given [ULong] value at.
@@ -62,6 +75,72 @@ fun PreparedStatement.setUInt(index: Int, value: UInt) =
  */
 fun PreparedStatement.setULong(index: Int, value: ULong) =
   setBigDecimal(index, BigInteger.valueOf(value.toLong()).and(UnsignedLongMask).toBigDecimal())
+
+/**
+ * Indexed setter for the given [value] on the receiver [PreparedStatement]
+ * which casts the value as a [Short] (SQL type [`SMALLINT`][Types.SMALLINT]).
+ *
+ * Value is set as the `SMALLINT` type so as not to cause unexpected behavior
+ * for values exceeding the max signed `int8` value.
+ *
+ * @receiver PreparedStatement instance to mutate.
+ *
+ * @param index Index to set the given [UByte] value at.
+ *
+ * @param value Value to set at the given index.
+ */
+operator fun PreparedStatement.set(index: Int, value: UByte) =
+  setShort(index, value.toShort())
+
+/**
+ * Indexed setter for the given [value] on the receiver [PreparedStatement]
+ * which casts the value as a [Int] (SQL type [`INTEGER`][Types.INTEGER]).
+ *
+ * Value is set as the `INTEGER` type so as not to cause unexpected behavior for
+ * values exceeding the max signed `int16` value.
+ *
+ * @receiver PreparedStatement instance to mutate.
+ *
+ * @param index Index to set the given [UShort] value at.
+ *
+ * @param value Value to set at the given index.
+ */
+operator fun PreparedStatement.set(index: Int, value: UShort) =
+  setInt(index, value.toInt())
+
+/**
+ * Indexed setter for the given [value] on the receiver [PreparedStatement]
+ * which casts the value as a [Long] (SQL type [`BIGINT`][Types.BIGINT]).
+ *
+ * Value is set as the `BIGINT` type so as not to cause unexpected behavior for
+ * values exceeding the max signed `int32` value.
+ *
+ * @receiver PreparedStatement instance to mutate.
+ *
+ * @param index Index to set the given [UInt] value at.
+ *
+ * @param value Value to set at the given index.
+ */
+operator fun PreparedStatement.set(index: Int, value: UInt) =
+  setLong(index, value.toLong())
+
+/**
+ * Indexed setter for the given [value] on the receiver [PreparedStatement]
+ * which casts the value as a [BigDecimal]
+ * (SQL type [`NUMERIC`][Types.NUMERIC]).
+ *
+ * Value is set as the `NUMERIC` type so as not to cause unexpected behavior for
+ * values exceeding the max signed `int64` value.
+ *
+ * @receiver PreparedStatement instance to mutate.
+ *
+ * @param index Index to set the given [ULong] value at.
+ *
+ * @param value Value to set at the given index.
+ */
+operator fun PreparedStatement.set(index: Int, value: ULong) =
+  setBigDecimal(index, BigInteger.valueOf(value.toLong()).and(UnsignedLongMask).toBigDecimal())
+
 
 /**
  * Indexing operator overload for setting [PreparedStatement] bind variables.
