@@ -173,11 +173,6 @@ tasks.register("release") {
       }
     }
   }
-
-  dependsOn(
-    "publishToSonatype",
-    "closeAndReleaseSonatypeStagingRepository"
-  )
 }
 
 tasks.register("update-readme") {
