@@ -6,8 +6,24 @@ plugins {
   signing
 }
 
-group = "io.foxcapades.lib"
-version = "1.0.0"
+data class SemVer(
+  val major: Int,
+  val minor: Int,
+  val patch: Int,
+) {
+  inline val featureVersion get() = "$major.$minor.0"
+
+  inline val gitTag get() = "v$major.$minor.$patch"
+
+  inline val sedExp get() = "SemVer(major = $major, minor = $minor, patch = $patch)"
+
+  override fun toString() = "$major.$minor.$patch"
+}
+
+val projectVersion = SemVer(major = 1, minor = 0, patch = 0)
+
+group = "io.foxcapades.kt"
+version = projectVersion.toString()
 
 repositories {
   mavenCentral()
@@ -23,25 +39,6 @@ tasks.test {
 kotlin {
   jvmToolchain(11)
 }
-
-data class SemVer(
-  val major: Int,
-  val minor: Int,
-  val patch: Int,
-) {
-  inline val featureVersion get() = "$major.$minor.0"
-
-  inline val gitTag get() = "v$major.$minor.$patch"
-
-  inline val sedExp get() = "SemVer(major = $major, minor = $minor, patch = $patch)"
-
-  override fun toString() = "$major.$minor.$patch"
-}
-
-val projectVersion = SemVer(major = 0, minor = 8, patch = 5)
-
-group = "io.foxcapades.kt"
-version = projectVersion.toString()
 
 repositories {
   mavenCentral()
