@@ -90,7 +90,7 @@ tasks.dokkaHtml {
 }
 
 mavenCentral {
-  authToken = Base64.getUrlEncoder().encodeToString("${project.properties["sonatypUsername"]}:${project.properties["sonatypePassword"]}".toByteArray())
+  authToken = Base64.getUrlEncoder().encodeToString("${project.properties["nexus.user"]}:${project.properties["nexus.pass"]}".toByteArray())
 }
 
 publishing {
