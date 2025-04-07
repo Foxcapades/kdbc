@@ -1,11 +1,12 @@
 import java.net.URL
+import java.util.Base64
 
 plugins {
+  `maven-publish`
+  signing
   alias(libs.plugins.kotlin)
   alias(libs.plugins.dokka)
   alias(libs.plugins.nexus)
-  `maven-publish`
-  signing
 }
 
 data class SemVer(
@@ -22,7 +23,7 @@ data class SemVer(
   override fun toString() = "$major.$minor.$patch"
 }
 
-val projectVersion = SemVer(major = 1, minor = 0, patch = 0)
+val projectVersion = SemVer(major = 1, minor = 0, patch = 1)
 
 group = "io.foxcapades.kt"
 version = projectVersion.toString()
@@ -44,10 +45,6 @@ kotlin {
 
 repositories {
   mavenCentral()
-  maven {
-    name = "Sonatype Releases"
-    url = uri("https://s01.oss.sonatype.org/content/repositories/releases")
-  }
 }
 
 kotlin {
@@ -92,16 +89,9 @@ tasks.dokkaHtml {
   }
 }
 
-//nexusPublishing {
-//  repositories {
-//    sonatype {
-//      nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
-//      snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-//      username = project.findProperty("nexus.user") as String? ?: System.getenv("NEXUS_USER")
-//      password = project.findProperty("nexus.pass") as String? ?: System.getenv("NEXUS_PASS")
-//    }
-//  }
-//}
+mavenCentral {
+  authToken = Base64.getUrlEncoder().encodeToString("${project.properties["sonatypUsername"]}:${project.properties["sonatypePassword"]}".toByteArray())
+}
 
 publishing {
   publications {
@@ -177,6 +167,8 @@ tasks.register("release") {
       }
     }
   }
+
+  finalizedBy("publishToMavenCentralPortal")
 }
 
 tasks.register("update-readme") {
@@ -208,4 +200,9 @@ tasks.register("update-readme") {
     readme.delete()
     tmp.renameTo(readme)
   }
+}
+
+tasks.withType<tech.yanand.gradle.mavenpublish.PublishToCentralPortalTask> {
+  dependsOn("release")
+  finalizedBy("update-readme")
 }
