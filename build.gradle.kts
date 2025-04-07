@@ -72,9 +72,9 @@ tasks.test {
 
   testLogging {
     events(
-      TestLogEvent.PASSED,
-      TestLogEvent.FAILED,
-      TestLogEvent.SKIPPED,
+//      TestLogEvent.PASSED,
+//      TestLogEvent.FAILED,
+//      TestLogEvent.SKIPPED,
     )
 
     showStandardStreams = true
@@ -111,7 +111,7 @@ publishing {
         description.set("Provides extension methods for the JDBC API to" +
         " enable more Kotlin-esque construction and usage of various JDBC" +
         " types and methods.")
-        url.set("https://github.com/foxcapades/lib-kt-cli-builder")
+        url.set("https://github.com/foxcapades/kdbc")
 
         licenses {
           license {
@@ -129,9 +129,9 @@ publishing {
         }
 
         scm {
-          connection.set("scm:git:git://github.com/foxcapades/lib-kt-cli-builder.git")
-          developerConnection.set("scm:git:ssh://github.com/foxcapades/lib-kt-cli-builder.git")
-          url.set("https://github.com/foxcapades/lib-kt-cli-builder")
+          connection.set("scm:git:git://github.com/foxcapades/kdbc.git")
+          developerConnection.set("scm:git:ssh://github.com/foxcapades/kdbc.git")
+          url.set("https://github.com/foxcapades/kdbc")
         }
       }
     }
@@ -145,7 +145,7 @@ signing {
   sign(publishing.publications["gpr"])
 }
 
-tasks.create("bump-feature") {
+tasks.register("bump-feature") {
   group = "Custom"
 
   doLast {
