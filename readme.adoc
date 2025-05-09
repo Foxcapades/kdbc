@@ -1,7 +1,7 @@
 = JDBC Kotlin Extensions
 :source-highlighter: highlightjs
 :version-feature: 1.1.0
-:version-actual: 1.1.0
+:version-actual: 1.1.1
 
 Utility library providing more Kotlin-friendly extensions of the JDBC API.
 
