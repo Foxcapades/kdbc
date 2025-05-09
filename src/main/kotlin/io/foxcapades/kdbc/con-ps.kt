@@ -225,22 +225,22 @@ inline fun Connection.usingPreparedUpdate(sql: String, action: (PreparedStatemen
  * **NOTE**: [PreparedStatement.addBatch] is called between every execution of
  * [action], meaning `action` should not call `addBatch` itself.
  *
- * **WARNING**: [withPreparedBatchUpdate] DOES NOT call
+ * **WARNING**: [usingPreparedBatchUpdate] DOES NOT call
  * [PreparedStatement.clearParameters] between calls to `action`.
  *
  * Example - Plain:
  * ```kotlin
- * val updateCounts = con.withPreparedBatchUpdate(sql, myRows) {
- *   setInt(1, it.rowId)
- *   setString(2, it.rowName)
+ * val updateCounts = con.usingPreparedBatchUpdate(sql, myRows) { ps, it ->
+ *   ps.setInt(1, it.rowId)
+ *   ps.setString(2, it.rowName)
  * }
  * ```
  *
  * Example - Execute Batch Every 500 Rows:
  * ```kotlin
- * val updateCounts = con.withPreparedBatchUpdate(sql, myRows, 500) {
- *   setInt(1, it.rowId)
- *   setString(2, it.rowName)
+ * val updateCounts = con.usingPreparedBatchUpdate(sql, myRows, 500) { ps, it ->
+ *   ps.setInt(1, it.rowId)
+ *   ps.setString(2, it.rowName)
  * }
  * ```
  *
@@ -299,6 +299,7 @@ inline fun <T> Connection.usingPreparedBatchUpdate(
       iterable.forEach {
         execute = true
         action(ps, it)
+        ps.addBatch()
       }
       if (execute)
         ps.executeBatch()
